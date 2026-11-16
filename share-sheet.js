@@ -278,13 +278,14 @@
     });
     return button;
   };
-  // Opens the inline "Share with Outlook" compose step; Back returns to this sheet with its state intact.
-  function shareToOutlook(person, { withDetails }) {
+  // Back from the inline document compose step preserves the share-sheet state.
+  function shareDocument(person, { withDetails }) {
     const file = files[0];
     const returnFocus = origin;
     origin = null;
     sheet.close();
-    window.OutlookShare.open({
+    window.DocumentShare.open({
+      app: person.app,
       contact: { name: person.fullName || person.name, image: assetPath('People icons', person.image) },
       file: { name: file.name, size: file.size || '' },
       text: withDetails ? summaryPlainText() : '',
@@ -319,17 +320,17 @@
     const suggestedPeople = peopleSelected()
       ? people.map(person => person.name === 'Carlos' ? { name: 'Sabhyata', image: 'Sabhyata', app: 'Whatsapp' } : person)
       : docSelected()
-        // Figma 80:98606: Outlook contacts are suggested for the PDF.
+        // The PDF suggests Mona on Teams alongside the Outlook contacts.
         ? people.map(person => person.name === 'Carlos' ? { name: 'Samantha', image: 'Samantha', app: 'Outlook' }
-          : person.name === 'Mona Kane' ? { ...person, app: 'Outlook' } : person)
+          : person.name === 'Mona Kane' ? { ...person, app: 'Teams' } : person)
         : people;
     suggestedPeople.filter(person => `${person.name} ${person.fullName || ''} ${person.app || ''}`.toLowerCase().includes(query)).forEach(person => {
-      const badge = person.phone ? '' : `<span class="ss-badge ss-badge-${person.app.toLowerCase()}"><img src="${assetPath('App icons', person.app)}" alt=""></span>`;
+      const badge = person.phone ? '' : `<span class="ss-badge ss-badge-${person.app.toLowerCase()}"><img src="${assetPath(person.app === 'Teams' ? 'icons' : 'App icons', person.app)}" alt=""></span>`;
       const markup = person.phone
         ? '<span class="ss-phone"><img src="icons/myphone.png" alt=""></span>'
         : `<span class="ss-avatar"><img class="ss-person-photo" src="${assetPath('People icons', person.image)}" alt="">${badge}</span>`;
       const handler = person.app === 'Whatsapp' && window.WhatsAppWindow ? state => shareToWhatsApp(person, state)
-        : person.app === 'Outlook' && docSelected() && window.OutlookShare ? state => shareToOutlook(person, state)
+        : (person.app === 'Outlook' || person.app === 'Teams') && docSelected() && window.DocumentShare ? state => shareDocument(person, state)
         : null;
       const button = targetButton(person.name, markup, handler);
       button.setAttribute('aria-label', person.phone ? `${person.name}, My Phone` : `${person.name}, ${person.app}`);

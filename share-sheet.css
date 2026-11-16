@@ -321,6 +321,7 @@
 .ss-badge { position: absolute; left: 23.5px; top: 23px; width: 20px; height: 20px; display: grid; place-items: center; border-radius: 50%; background: #f5f8ff; }
 .ss-badge img { width: 17.143px; height: 17.143px; object-fit: contain; }
 .ss-badge-outlook img { width: 15px; height: 15px; }
+.ss-badge-teams img { width: 16px; height: 16px; }
 .ss-phone { width: 40px; height: 40px; flex-shrink: 0; display: grid; place-items: center; border: 1px solid #dfe4ed; border-radius: 50%; background: #ffffff55; }
 .ss-phone img { width: 20px; height: 28px; object-fit: contain; }
 .ss-app-header { display: flex; flex-shrink: 0; align-items: center; justify-content: space-between; height: 40px; margin: 16px 3.5px 0; padding-left: 12.5px; }

@@ -1,4 +1,4 @@
-/* Inline "Share with Outlook" step. Sizes are Figma px (frame 528x625), scaled like the share sheet. */
+/* Inline Outlook/Teams document sharing. Sizes are Figma px (frame 528x625), scaled like the share sheet. */
 .ol-sheet {
   position: fixed;
   inset: 50% auto auto 50%;
@@ -31,7 +31,7 @@
 .ol-back { width: 28px; height: 28px; margin-right: 4px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 4px; background: transparent; }
 .ol-back:hover { background: #0000000a; }
 .ol-back svg { width: 16px; height: 16px; }
-.ol-app-icon { width: 16px; height: 16px; margin-right: 8px; }
+.ol-app-icon { width: 16px; height: 16px; flex: 0 0 16px; object-fit: contain; margin-right: 8px; }
 [data-stage="sending"] .ol-app-icon, [data-stage="done"] .ol-app-icon { margin-left: 8px; }
 .ol-header h1 { flex: 1; margin: 0; font-size: 12px; line-height: 16px; font-weight: 400; }
 .ol-close { width: 48px; height: 48px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 4px; background: transparent; }

@@ -1,4 +1,4 @@
-// Inline "Share with Outlook" step from the share sheet (Figma 83:106629, 87:114887, 87:116307).
+// Inline document sharing through Outlook or Teams, selected by the contact's app.
 // Sending is simulated; nothing leaves the prototype.
 (() => {
   const asset = (folder, name) => encodeURI(`${folder}/${name}`);
@@ -8,8 +8,8 @@
   dialog.innerHTML = `
     <header class="ol-header">
       <button type="button" class="ol-back" aria-label="Back to share sheet"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M7 3 2 8l5 5M2.5 8H14" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <img class="ol-app-icon" src="${asset('App icons', 'Outlook.png')}" alt="">
-      <h1 id="ol-title">Share with Outlook</h1>
+      <img class="ol-app-icon" alt="">
+      <h1 id="ol-title"></h1>
       <button type="button" class="ol-close" aria-label="Close"><img src="${asset('Other icons', 'Cross icon.png')}" alt=""></button>
     </header>
     <div class="ol-compose">
@@ -93,7 +93,8 @@
     if (sending) {
       const names = recipients.map(person => person.name).join(', ');
       find('.ol-progress-file').textContent = options.file.name;
-      find('.ol-progress-text').textContent = `${next === 'done' ? 'Shared' : 'Sharing'} with ${names} over Outlook`;
+      const channel = options.app === 'Teams' ? 'using Teams' : 'over Outlook';
+      find('.ol-progress-text').textContent = `${next === 'done' ? 'Shared' : 'Sharing'} with ${names} ${channel}`;
     }
   }
   function close() {
@@ -158,9 +159,11 @@
   });
   window.addEventListener('resize', () => { if (dialog.open) updateScale(); });
 
-  window.OutlookShare = {
+  window.DocumentShare = {
     open(config) {
       options = config;
+      find('.ol-app-icon').src = asset(config.app === 'Teams' ? 'icons' : 'App icons', `${config.app}.png`);
+      find('#ol-title').textContent = config.app === 'Teams' ? 'Share using Teams' : 'Share with Outlook';
       recipients = [{ ...config.contact }];
       clearTimeout(sendTimer);
       sendTimer = null;
